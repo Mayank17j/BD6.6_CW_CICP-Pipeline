@@ -1,3 +1,5 @@
+//SET UP VERCEL PATH AS "src": "BD6.6_CW/server.js" "DESTINATION": "BD6.6_CW/server.js"
+
 const express = require('express');
 const app = express();
 app.use(express.json());
