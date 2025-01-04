@@ -1,10 +1,10 @@
 const request = require('supertest');
-const { getAllEmployees, getEmployeesById } = require('../index.js');
+const { getAllEmployees, getEmployeesById } = require('../controllers');
 const { app } = require('../index.js');
 const http = require('http');
 
 jest.mock('../controllers', () => ({
-  ...jest.requireActual('../controllers.js'),
+  ...jest.requireActual('../controllers'),
   getAllEmployees: jest.fn(),
   getEmployeesById: jest.fn(),
 }));
@@ -28,7 +28,7 @@ describe('Controller function tests', () => {
   it('should return all employees', () => {
     let mockedEmployees = [
       {
-        employees: 1,
+        id: 1,
         name: 'Rahul Sharma',
         email: 'rahul.sharma@example.com',
         departmentId: 1,
@@ -45,13 +45,13 @@ describe('Controller function tests', () => {
 //TEST API
 describe('API Endpoint tests', () => {
   //Exercise 3: Test Retrieve All Employees
-  it('GET /employees should get all employees', async (     ) => {
+  it('GET /employees should get all employees', async () => {
     const res = await request(server).get('/employees');
     expect(res.status).toBe(200);
     expect(res.body).toEqual({
       employees: [
         {
-          employees: 1,
+          id: 1,
           name: 'Rahul Sharma',
           email: 'rahul.sharma@example.com',
           departmentId: 1,
@@ -63,18 +63,24 @@ describe('API Endpoint tests', () => {
   });
 
   //Exercise 4: Test Retrieve Employee by ID
-  it('GET /employees/details/:it should get all employee by Id', () => {
+  it('GET /employees/details/:it should get all employee by Id', async () => {
+    getEmployeesById.mockReturnValue({
+      id: 1,
+      name: 'Rahul Sharma',
+      email: 'rahul.sharma@example.com',
+      departmentId: 1,
+      roleId: 1,
+    });
     const res = await request(server).get('/employees/details/1');
     expect(res.status).toBe(200);
     expect(res.body).toEqual({
-      employee: 
-        {
-          employees: 1,
-          name: 'Rahul Sharma',
-          email: 'rahul.sharma@example.com',
-          departmentId: 1,
-          roleId: 1,
-        },
+      employee: {
+        id: 1,
+        name: 'Rahul Sharma',
+        email: 'rahul.sharma@example.com',
+        departmentId: 1,
+        roleId: 1,
+      },
     });
   });
 });
